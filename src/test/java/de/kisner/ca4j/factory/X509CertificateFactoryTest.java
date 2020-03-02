@@ -22,7 +22,7 @@ public class X509CertificateFactoryTest
 	public void testDn() throws Ca4jException
 	{
 		KeyPair keys = KeyUtils.randomKeyPair();
-		Ca4jDistinguishedName dn = DistinguishedNameTest.dn();
+		Ca4jDistinguishedName dn = DistinguishedNameTest.dnCa();
 		X509CertificateFactory<Ca4jDistinguishedName> fX509 = new X509CertificateFactory<>(keys,dn);
 		X509Certificate certificate = fX509.selfSigned();
 		System.out.println(PemCertificateFactory.build(certificate));

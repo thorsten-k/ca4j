@@ -10,13 +10,13 @@ import java.nio.file.StandardOpenOption;
 import java.security.cert.X509Certificate;
 
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
+import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
 public class PemCertificateFactory
 {	
 
 	public static String build(X509Certificate certificate)
 	{
-		
 		try
 		{
 			StringWriter sw = new StringWriter();
@@ -30,16 +30,30 @@ public class PemCertificateFactory
 		return null;
 	}
 	
+	public static String build(PKCS10CertificationRequest csr)
+	{
+		try
+		{
+			StringWriter sw = new StringWriter();
+			JcaPEMWriter writer = new JcaPEMWriter(sw);
+			writer.writeObject(csr);
+			writer.flush();
+			return sw.toString();
+		
+		}
+		catch (IOException e) {e.printStackTrace();}
+		return null;
+	}
+	
 	public static void save(X509Certificate certificate, File file)
 	{
-    try
-    {
-      BufferedWriter fw = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8,StandardOpenOption.CREATE);
-      JcaPEMWriter writer = new JcaPEMWriter(fw);
-      writer.writeObject(certificate);
-      writer.flush();
-
-    }
-    catch (IOException e) {e.printStackTrace();}
-  }
+		try
+		{
+			BufferedWriter fw = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8,StandardOpenOption.CREATE);
+			JcaPEMWriter writer = new JcaPEMWriter(fw);
+			writer.writeObject(certificate);
+			writer.flush();
+		}
+		catch (IOException e) {e.printStackTrace();}
+	}
 }

@@ -11,14 +11,18 @@ public class DistinguishedNameTest
 		
 	}
 	
-	public static Ca4jDistinguishedName dn()
+	public static Ca4jDistinguishedName dnCa()
 	{
 		return Ca4jDistinguishedNameFactory.instance().cn("Snake Oil").o("Some Corporation").ou("Unit").s("X").c("Earth").build();
+	}
+	public static Ca4jDistinguishedName dnWww()
+	{
+		return Ca4jDistinguishedNameFactory.instance().cn("www.localhost").o("Some Corporation").ou("Unit").s("X").c("Earth").build();
 	}
 	
 	public void testDn()
 	{
-		Ca4jDistinguishedName dn = DistinguishedNameTest.dn();
+		Ca4jDistinguishedName dn = DistinguishedNameTest.dnCa();
 		System.out.println(dn.toString());
 	}
 	
