@@ -1,4 +1,4 @@
-package de.kisner.ca4j.factory.x500;
+package de.kisner.ca4j.factory.x509;
 
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -33,22 +33,21 @@ import de.kisner.ca4j.model.Ca4jCertificateExtension;
 
 public class X509CertificateFactory <DN extends DistinguishedName>
 {
-	private static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
+	public static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
 	  
 	private JcaX509ExtensionUtils x509ExtensionUtil;
 	  
-	private DN caDn;
-	
-	private KeyPair caKeyPair;
-	  
+	private KeyPair kpCa;
+	private DN dnCa;
+
 	private BigInteger serialNumber;
 	  
 	private X500NameFactory<DN> fX500;
 	  
-	public X509CertificateFactory(KeyPair caKeyPair, DN caDn)
+	public X509CertificateFactory(KeyPair kpCa, DN dnCa)
 	{
-		this.caDn=caDn;
-		this.caKeyPair=caKeyPair;
+		this.dnCa=dnCa;
+		this.kpCa=kpCa;
 		
 		try {x509ExtensionUtil = new JcaX509ExtensionUtils();}
 		catch (NoSuchAlgorithmException e) {e.printStackTrace();}
@@ -57,36 +56,36 @@ public class X509CertificateFactory <DN extends DistinguishedName>
 		fX500 = new X500NameFactory<>();
 	}
 	
-	public X509Certificate selfSigned() throws Ca4jException
+	public X509Certificate signSelf() throws Ca4jException
 	{
 		List<Ca4jCertificateExtension> extensions = new ArrayList<>();
 		extensions.add(Ca4jCertificateExtensionFactory.keyUsage(KeyUsage.keyCertSign,KeyUsage.cRLSign));
 		extensions.add(Ca4jCertificateExtensionFactory.build(Extension.basicConstraints,false,new BasicConstraints(true)));
-		return build(caDn,caKeyPair.getPublic(),extensions);
+		return sign(dnCa,kpCa.getPublic(),extensions);
 	}
-	
-	public X509Certificate build(DN certDn, PublicKey certPubKey, List<Ca4jCertificateExtension> extensions) throws Ca4jException
+	public X509Certificate sign(DN dnHost, PublicKey pkHost) throws Ca4jException {return sign(dnHost,pkHost,new ArrayList<Ca4jCertificateExtension>());}
+	public X509Certificate sign(DN dnHost, PublicKey pkHost, List<Ca4jCertificateExtension> extensions) throws Ca4jException
 	{
 		try
 		{
-			X500Name x500Ca = fX500.build(caDn);
-			X500Name x500Cert = fX500.build(certDn);
+			X500Name x500Ca = fX500.build(dnCa);
+			X500Name x500Cert = fX500.build(dnHost);
 			
 			Date validFrom  = Date.from(ZonedDateTime.now().toInstant());
 			Date validUntil = Date.from(ZonedDateTime.now().plusYears(1).toInstant());
 			
-			SubjectPublicKeyInfo sbki = SubjectPublicKeyInfo.getInstance(certPubKey.getEncoded());
+			SubjectPublicKeyInfo sbki = SubjectPublicKeyInfo.getInstance(pkHost.getEncoded());
 	      
 			X509v3CertificateBuilder cB = new X509v3CertificateBuilder(x500Ca,serialNumber,validFrom,validUntil,x500Cert,sbki);
-			cB.addExtension(Extension.authorityKeyIdentifier, false, x509ExtensionUtil.createAuthorityKeyIdentifier(caKeyPair.getPublic()));
-			cB.addExtension(Extension.subjectKeyIdentifier, false, x509ExtensionUtil.createSubjectKeyIdentifier(certPubKey));
+			cB.addExtension(Extension.authorityKeyIdentifier, false, x509ExtensionUtil.createAuthorityKeyIdentifier(kpCa.getPublic()));
+			cB.addExtension(Extension.subjectKeyIdentifier, false, x509ExtensionUtil.createSubjectKeyIdentifier(pkHost));
 
 			for (Ca4jCertificateExtension e : extensions)
 			{
 				cB.addExtension(e.getOid(),e.isCritical(),e.getAsn1());
 			}
 
-			ContentSigner cs = new JcaContentSignerBuilder(SIGNATURE_ALGORITHM).build(caKeyPair.getPrivate());
+			ContentSigner cs = new JcaContentSignerBuilder(X509CertificateFactory.SIGNATURE_ALGORITHM).build(kpCa.getPrivate());
 			X509CertificateHolder holder = cB.build(cs);
 			X509Certificate certificate = new JcaX509CertificateConverter().getCertificate(holder);
 

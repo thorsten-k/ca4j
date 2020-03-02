@@ -1,12 +1,12 @@
-package de.kisner.ca4j.test;
+package de.kisner.ca4j.factory;
 
 import de.kisner.ca4j.Ca4jBootstrap;
 import de.kisner.ca4j.factory.ca4j.Ca4jDistinguishedNameFactory;
 import de.kisner.ca4j.model.Ca4jDistinguishedName;
 
-public class DistinguishedNameTest
+public class Ca4jDnTest
 {
-	public DistinguishedNameTest()
+	public Ca4jDnTest()
 	{
 		
 	}
@@ -15,14 +15,14 @@ public class DistinguishedNameTest
 	{
 		return Ca4jDistinguishedNameFactory.instance().cn("Snake Oil").o("Some Corporation").ou("Unit").s("X").c("Earth").build();
 	}
-	public static Ca4jDistinguishedName dnWww()
+	public static Ca4jDistinguishedName dnHost()
 	{
-		return Ca4jDistinguishedNameFactory.instance().cn("www.localhost").o("Some Corporation").ou("Unit").s("X").c("Earth").build();
+		return Ca4jDistinguishedNameFactory.instance().cn("192.168.1.16").o("Some Corporation").ou("Unit").s("X").c("Earth").build();
 	}
 	
 	public void testDn()
 	{
-		Ca4jDistinguishedName dn = DistinguishedNameTest.dnCa();
+		Ca4jDistinguishedName dn = Ca4jDnTest.dnCa();
 		System.out.println(dn.toString());
 	}
 	
@@ -30,7 +30,7 @@ public class DistinguishedNameTest
 	{
 		Ca4jBootstrap.init();
 		
-		DistinguishedNameTest cli = new DistinguishedNameTest();
+		Ca4jDnTest cli = new Ca4jDnTest();
 		cli.testDn();
 	}
 }

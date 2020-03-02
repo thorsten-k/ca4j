@@ -1,4 +1,4 @@
-package de.kisner.ca4j.factory.txt;
+package de.kisner.ca4j.factory.x509;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -7,15 +7,15 @@ import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
+import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 
 import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
-public class PemCertificateFactory
+public class PemFactory
 {	
-
-	public static String build(X509Certificate certificate)
+	public static String toString(X509Certificate certificate)
 	{
 		try
 		{
@@ -30,7 +30,21 @@ public class PemCertificateFactory
 		return null;
 	}
 	
-	public static String build(PKCS10CertificationRequest csr)
+	public static String toString(PrivateKey privateKey)
+	{
+	    try
+	    {
+	    	StringWriter sw = new StringWriter();
+	    	JcaPEMWriter writer = new JcaPEMWriter(sw);
+	        writer.writeObject(privateKey);
+	        writer.flush();
+	        return sw.toString();
+	    }
+	    catch (IOException e) {e.printStackTrace();}
+		return null;
+	}
+	
+	public static String toString(PKCS10CertificationRequest csr)
 	{
 		try
 		{
@@ -45,7 +59,7 @@ public class PemCertificateFactory
 		return null;
 	}
 	
-	public static void save(X509Certificate certificate, File file)
+	public static void toFile(X509Certificate certificate, File file)
 	{
 		try
 		{
