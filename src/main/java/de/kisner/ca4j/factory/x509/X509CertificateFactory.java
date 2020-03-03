@@ -63,22 +63,21 @@ public class X509CertificateFactory <DN extends Ca4jDistinguishedName>
 		extensions.add(Ca4jCertificateExtensionFactory.build(Extension.basicConstraints,false,new BasicConstraints(true)));
 		return sign(dnCa,kpCa.getPublic(),extensions);
 	}
-	public X509Certificate sign(DN dnHost, PublicKey pkHost) throws Ca4jException {return sign(dnHost,pkHost,new ArrayList<CaCertificateExtension>());}
-	public X509Certificate sign(DN dnHost, PublicKey pkHost, List<CaCertificateExtension> extensions) throws Ca4jException
+	
+	public X509Certificate sign(DN dnHost, PublicKey pkHost) throws Ca4jException {return sign(fX500.build(dnHost),pkHost);}
+	public X509Certificate sign(DN dnHost, PublicKey pkHost, List<CaCertificateExtension> extensions) throws Ca4jException {return sign(fX500.build(dnHost), SubjectPublicKeyInfo.getInstance(pkHost.getEncoded()), extensions);}
+	public X509Certificate sign(X500Name x500Cert, PublicKey pkHost) throws Ca4jException {return sign(x500Cert,SubjectPublicKeyInfo.getInstance(pkHost.getEncoded()));}
+	public X509Certificate sign(X500Name x500Cert, SubjectPublicKeyInfo sbki) throws Ca4jException {return sign(x500Cert,sbki,new ArrayList<CaCertificateExtension>());}
+	public X509Certificate sign(X500Name x500Cert, SubjectPublicKeyInfo sbki, List<CaCertificateExtension> extensions) throws Ca4jException
 	{
 		try
-		{
-			X500Name x500Ca = fX500.build(dnCa);
-			X500Name x500Cert = fX500.build(dnHost);
-			
+		{			
 			Date validFrom  = Date.from(ZonedDateTime.now().toInstant());
 			Date validUntil = Date.from(ZonedDateTime.now().plusYears(1).toInstant());
-			
-			SubjectPublicKeyInfo sbki = SubjectPublicKeyInfo.getInstance(pkHost.getEncoded());
 	      
-			X509v3CertificateBuilder cB = new X509v3CertificateBuilder(x500Ca,serialNumber,validFrom,validUntil,x500Cert,sbki);
+			X509v3CertificateBuilder cB = new X509v3CertificateBuilder(fX500.build(dnCa),serialNumber,validFrom,validUntil,x500Cert,sbki);
 			cB.addExtension(Extension.authorityKeyIdentifier, false, x509ExtensionUtil.createAuthorityKeyIdentifier(kpCa.getPublic()));
-			cB.addExtension(Extension.subjectKeyIdentifier, false, x509ExtensionUtil.createSubjectKeyIdentifier(pkHost));
+			cB.addExtension(Extension.subjectKeyIdentifier, false, x509ExtensionUtil.createSubjectKeyIdentifier(sbki));
 
 			for (CaCertificateExtension e : extensions)
 			{

@@ -8,9 +8,11 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
 import de.kisner.ca4j.Ca4jBootstrap;
 import de.kisner.ca4j.exception.Ca4jException;
+import de.kisner.ca4j.factory.ca4j.Ca4jDistinguishedNameFactory;
 import de.kisner.ca4j.factory.x509.PemFactory;
 import de.kisner.ca4j.factory.x509.X509CertificateFactory;
 import de.kisner.ca4j.factory.x509.X509CsrFactory;
+import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
 import de.kisner.ca4j.model.CaDistinguishedName;
 import de.kisner.ca4j.util.KeyUtils;
 
@@ -33,10 +35,11 @@ public class Ca4jCaTest
 		X509CertificateFactory<CaDistinguishedName> fX509 = new X509CertificateFactory<>(kpCa,dnCa);
 		cCa = fX509.signSelf();
 		System.out.println(PemFactory.toString(cCa));
+		PemFactory.toFile(cCa,new File("/Volumes/ramdisk/ca.pem"));
 		PemFactory.toFile(cCa,new File("/Volumes/ramdisk/ca.p12"));
 	}
 	
-	public void csr() throws Ca4jException
+	public void csrFactory() throws Ca4jException
 	{
 		kpHost = KeyUtils.randomKeyPair();
 		System.out.println(PemFactory.toString(kpHost.getPrivate()));
@@ -51,7 +54,18 @@ public class Ca4jCaTest
 		X509CertificateFactory<CaDistinguishedName> fX509 = new X509CertificateFactory<>(kpCa,dnCa);
 		cHost = fX509.sign(dnHost,kpHost.getPublic());
 		System.out.println(PemFactory.toString(cHost));
-		PemFactory.toFile(cHost,new File("/Volumes/ramdisk/host.p12"));
+		PemFactory.toFile(cHost,new File("/Volumes/ramdisk/hostJava.p12"));
+	}
+	
+	public void signFile() throws Ca4jException
+	{		
+		X509CsrFactory<CaDistinguishedName> fPkcs = new X509CsrFactory<>();
+		PKCS10CertificationRequest csr = fPkcs.build(new File("/Volumes/ramdisk/csr.pem"));
+//		System.out.println(PemFactory.toString(csr));	
+		X509CertificateFactory<CaDistinguishedName> fX509 = new X509CertificateFactory<>(kpCa,dnCa);
+		cHost = fX509.sign(csr.getSubject(),csr.getSubjectPublicKeyInfo());
+		System.out.println(PemFactory.toString(cHost));
+		PemFactory.toFile(cHost,new File("/Volumes/ramdisk/hostJava.p12"));
 	}
 	
 	public void chain()
@@ -69,8 +83,8 @@ public class Ca4jCaTest
 		
 		Ca4jCaTest cli = new Ca4jCaTest();
 		cli.rootCa();
-		cli.csr();
-		cli.sign();
-		cli.chain();
+//		cli.sign();
+		cli.signFile();
+//		cli.chain();
 	}
 }
