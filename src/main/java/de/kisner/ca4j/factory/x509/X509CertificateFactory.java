@@ -28,10 +28,10 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import de.kisner.ca4j.exception.Ca4jException;
 import de.kisner.ca4j.factory.ca4j.Ca4jCertificateExtensionFactory;
-import de.kisner.ca4j.interfaces.DistinguishedName;
-import de.kisner.ca4j.model.Ca4jCertificateExtension;
+import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
+import de.kisner.ca4j.model.CaCertificateExtension;
 
-public class X509CertificateFactory <DN extends DistinguishedName>
+public class X509CertificateFactory <DN extends Ca4jDistinguishedName>
 {
 	public static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
 	  
@@ -58,13 +58,13 @@ public class X509CertificateFactory <DN extends DistinguishedName>
 	
 	public X509Certificate signSelf() throws Ca4jException
 	{
-		List<Ca4jCertificateExtension> extensions = new ArrayList<>();
+		List<CaCertificateExtension> extensions = new ArrayList<>();
 		extensions.add(Ca4jCertificateExtensionFactory.keyUsage(KeyUsage.keyCertSign,KeyUsage.cRLSign));
 		extensions.add(Ca4jCertificateExtensionFactory.build(Extension.basicConstraints,false,new BasicConstraints(true)));
 		return sign(dnCa,kpCa.getPublic(),extensions);
 	}
-	public X509Certificate sign(DN dnHost, PublicKey pkHost) throws Ca4jException {return sign(dnHost,pkHost,new ArrayList<Ca4jCertificateExtension>());}
-	public X509Certificate sign(DN dnHost, PublicKey pkHost, List<Ca4jCertificateExtension> extensions) throws Ca4jException
+	public X509Certificate sign(DN dnHost, PublicKey pkHost) throws Ca4jException {return sign(dnHost,pkHost,new ArrayList<CaCertificateExtension>());}
+	public X509Certificate sign(DN dnHost, PublicKey pkHost, List<CaCertificateExtension> extensions) throws Ca4jException
 	{
 		try
 		{
@@ -80,7 +80,7 @@ public class X509CertificateFactory <DN extends DistinguishedName>
 			cB.addExtension(Extension.authorityKeyIdentifier, false, x509ExtensionUtil.createAuthorityKeyIdentifier(kpCa.getPublic()));
 			cB.addExtension(Extension.subjectKeyIdentifier, false, x509ExtensionUtil.createSubjectKeyIdentifier(pkHost));
 
-			for (Ca4jCertificateExtension e : extensions)
+			for (CaCertificateExtension e : extensions)
 			{
 				cB.addExtension(e.getOid(),e.isCritical(),e.getAsn1());
 			}

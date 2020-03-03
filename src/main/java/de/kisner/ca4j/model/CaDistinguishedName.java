@@ -1,8 +1,8 @@
 package de.kisner.ca4j.model;
 
-import de.kisner.ca4j.interfaces.DistinguishedName;
+import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
 
-public class Ca4jDistinguishedName implements DistinguishedName
+public class CaDistinguishedName implements Ca4jDistinguishedName
 {
 	private String commonName;
 	@Override public String getCommonName() {return commonName;}
@@ -24,7 +24,7 @@ public class Ca4jDistinguishedName implements DistinguishedName
 	@Override public String getCoutry() {return coutry;}
 	@Override public void setCoutry(String coutry) {this.coutry = coutry;}
 	
-	public Ca4jDistinguishedName()
+	public CaDistinguishedName()
 	{
 		
 	}	

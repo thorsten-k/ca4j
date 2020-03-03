@@ -1,6 +1,6 @@
 package de.kisner.ca4j.interfaces;
 
-public interface DistinguishedName
+public interface Ca4jDistinguishedName
 {
 	String getCommonName();
 	void setCommonName(String commonName);

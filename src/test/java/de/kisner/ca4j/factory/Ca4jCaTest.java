@@ -11,14 +11,15 @@ import de.kisner.ca4j.exception.Ca4jException;
 import de.kisner.ca4j.factory.x509.PemFactory;
 import de.kisner.ca4j.factory.x509.X509CertificateFactory;
 import de.kisner.ca4j.factory.x509.X509CsrFactory;
-import de.kisner.ca4j.model.Ca4jDistinguishedName;
+import de.kisner.ca4j.model.CaDistinguishedName;
 import de.kisner.ca4j.util.KeyUtils;
 
 public class Ca4jCaTest
 {
 	private KeyPair kpCa,kpHost;
+	private X509Certificate cCa,cHost;
 	
-	private Ca4jDistinguishedName dnCa, dnHost;
+	private CaDistinguishedName dnCa, dnHost;
 	
 	public Ca4jCaTest()
 	{
@@ -29,10 +30,10 @@ public class Ca4jCaTest
 	{
 		kpCa = KeyUtils.randomKeyPair();
 		dnCa = Ca4jDnTest.dnCa();
-		X509CertificateFactory<Ca4jDistinguishedName> fX509 = new X509CertificateFactory<>(kpCa,dnCa);
-		X509Certificate certificate = fX509.signSelf();
-		System.out.println(PemFactory.toString(certificate));
-		PemFactory.toFile(certificate,new File("/Volumes/ramdisk/ca.p12"));
+		X509CertificateFactory<CaDistinguishedName> fX509 = new X509CertificateFactory<>(kpCa,dnCa);
+		cCa = fX509.signSelf();
+		System.out.println(PemFactory.toString(cCa));
+		PemFactory.toFile(cCa,new File("/Volumes/ramdisk/ca.p12"));
 	}
 	
 	public void csr() throws Ca4jException
@@ -40,22 +41,26 @@ public class Ca4jCaTest
 		kpHost = KeyUtils.randomKeyPair();
 		System.out.println(PemFactory.toString(kpHost.getPrivate()));
 		dnHost = Ca4jDnTest.dnHost();
-		X509CsrFactory<Ca4jDistinguishedName> fPkcs = new X509CsrFactory<>();
+		X509CsrFactory<CaDistinguishedName> fPkcs = new X509CsrFactory<>();
 		PKCS10CertificationRequest csr = fPkcs.build(kpHost,dnHost);
-//		System.out.println(PemFactory.toString(csr));
+		System.out.println(PemFactory.toString(csr));
 	}
 	
 	public void sign() throws Ca4jException
 	{
-		X509CertificateFactory<Ca4jDistinguishedName> fX509 = new X509CertificateFactory<>(kpCa,dnCa);
-		X509Certificate certificate = fX509.sign(dnHost,kpHost.getPublic());
-		System.out.println(PemFactory.toString(certificate));
-		PemFactory.toFile(certificate,new File("/Volumes/ramdisk/host.p12"));
+		X509CertificateFactory<CaDistinguishedName> fX509 = new X509CertificateFactory<>(kpCa,dnCa);
+		cHost = fX509.sign(dnHost,kpHost.getPublic());
+		System.out.println(PemFactory.toString(cHost));
+		PemFactory.toFile(cHost,new File("/Volumes/ramdisk/host.p12"));
 	}
 	
 	public void chain()
 	{
+		System.out.println("****************");
 //		https://www.digicert.com/kb/ssl-support/pem-ssl-creation.htm
+		System.out.println(PemFactory.toString(kpHost.getPrivate())
+							+PemFactory.toString(cHost)
+							+PemFactory.toString(cCa));
 	}
 	
 	public static void main(final String[] args) throws Ca4jException
@@ -66,5 +71,6 @@ public class Ca4jCaTest
 		cli.rootCa();
 		cli.csr();
 		cli.sign();
+		cli.chain();
 	}
 }
