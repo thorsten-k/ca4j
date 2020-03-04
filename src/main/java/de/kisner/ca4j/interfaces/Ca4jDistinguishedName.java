@@ -14,6 +14,6 @@ public interface Ca4jDistinguishedName
 	String getState();
 	void setState(String state);
 	
-	String getCoutry();
-	void setCoutry(String coutry);
+	String getCountry();
+	void setCountry(String country);
 }

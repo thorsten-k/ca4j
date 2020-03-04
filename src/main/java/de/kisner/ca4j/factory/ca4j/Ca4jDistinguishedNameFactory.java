@@ -39,7 +39,7 @@ public class Ca4jDistinguishedNameFactory<DN extends Ca4jDistinguishedName>
 	public Ca4jDistinguishedNameFactory<DN> o(String o) {dn.setOrganisation(o);return this;}
 	public Ca4jDistinguishedNameFactory<DN> ou(String ou) {dn.setOrganisationalUnit(ou);return this;}
 	public Ca4jDistinguishedNameFactory<DN> s(String s) {dn.setState(s);return this;}
-	public Ca4jDistinguishedNameFactory<DN> c(String c) {dn.setCoutry(c);return this;}
+	public Ca4jDistinguishedNameFactory<DN> c(String c) {dn.setCountry(c);return this;}
 	
 	public DN build(PKCS10CertificationRequest csr)
 	{
