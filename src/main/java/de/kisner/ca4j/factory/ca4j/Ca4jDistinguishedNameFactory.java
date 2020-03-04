@@ -20,14 +20,20 @@ public class Ca4jDistinguishedNameFactory<DN extends Ca4jDistinguishedName>
 		this.c=c;
 	}
 	
+	public DN toDn() {return dn;}
 	public Ca4jDistinguishedNameFactory<DN> fluid()
 	{
-		try {dn = c.newInstance();}
-		catch (InstantiationException | IllegalAccessException e) {e.printStackTrace();}
+		dn = build();
 		return this;
 	}
 	
-	public DN build() {return dn;}
+	public DN build()
+	{
+		DN dn = null;
+		try {dn = c.newInstance();}
+		catch (InstantiationException | IllegalAccessException e) {e.printStackTrace();}
+		return dn;
+	}
 	
 	public Ca4jDistinguishedNameFactory<DN> cn(String cn) {dn.setCommonName(cn);return this;}
 	public Ca4jDistinguishedNameFactory<DN> o(String o) {dn.setOrganisation(o);return this;}
@@ -37,19 +43,14 @@ public class Ca4jDistinguishedNameFactory<DN extends Ca4jDistinguishedName>
 	
 	public DN build(PKCS10CertificationRequest csr)
 	{
-		DN dn = null;
-		try
+		DN dn = build();
+		for(RDN r : csr.getSubject().getRDNs())
 		{
-			dn = c.newInstance();
-			for(RDN r : csr.getSubject().getRDNs())
-			{
-			
-				System.out.println("r: "+r.getFirst().getType()+" "+r.getFirst().getValue());
-			}
-			System.out.println("X: "+csr.getSubject().toString());
-			dn.setCommonName(csr.getSubject().toString());
+		
+			System.out.println("r: "+r.getFirst().getType()+" "+r.getFirst().getValue());
 		}
-		catch (InstantiationException | IllegalAccessException e) {e.printStackTrace();}
+		System.out.println("X: "+csr.getSubject().toString());
+		dn.setCommonName(csr.getSubject().toString());
 		return dn;
 	}
 }

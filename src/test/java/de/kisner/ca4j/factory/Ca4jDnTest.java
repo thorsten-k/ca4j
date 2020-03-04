@@ -13,11 +13,11 @@ public class Ca4jDnTest
 	
 	public static CaDistinguishedName dnCa()
 	{
-		return Ca4jDistinguishedNameFactory.instance(CaDistinguishedName.class).fluid().cn("Ca4j").o("Github Ca4j").ou("Unit").s("X").c("Earth").build();
+		return Ca4jDistinguishedNameFactory.instance(CaDistinguishedName.class).fluid().cn("Ca4j").o("Github Ca4j").ou("Unit").s("X").c("Earth").toDn();
 	}
 	public static CaDistinguishedName dnHost()
 	{
-		return Ca4jDistinguishedNameFactory.instance(CaDistinguishedName.class).fluid().cn("192.168.1.16").o("Some Corporation").ou("Unit").s("X").c("Earth").build();
+		return Ca4jDistinguishedNameFactory.instance(CaDistinguishedName.class).fluid().cn("192.168.1.16").o("Some Corporation").ou("Unit").s("X").c("Earth").toDn();
 	}
 	
 	public void testDn()
