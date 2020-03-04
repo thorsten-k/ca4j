@@ -13,19 +13,24 @@
 		<my.build.directory>target</my.build.directory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    	<maven.ignore>file://${basedir}/src/main/resources/ca4j/maven/ignore-versions.xml</maven.ignore>
+		<maven.ignore.versions>file://${project.basedir}/src/main/resources/ca4j/maven/ignore-versions.xml</maven.ignore.versions>
 	</properties>
 
 	<prerequisites>
 		<maven>3.0</maven>
 	</prerequisites>
 
+	<dependencyManagement>
+		
+	</dependencyManagement>
+
 	<dependencies>		
 	
+		<!-- PKIX -->
 	    <dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcpkix-jdk15on</artifactId>
-			<version>1.54</version>
+			<version>1.64</version>
 		</dependency>
     
 		<!-- Logging -->
@@ -33,23 +38,27 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<scope>compile</scope>
+			<version>1.7.30</version>
 		</dependency>
 		
 		<!-- Test -->
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<scope>test</scope>
+			<version>1.7.30</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<scope>test</scope>
+			<version>1.7.30</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<scope>test</scope>
+			<version>1.2.17</version>
 		</dependency>
 	</dependencies>
 
@@ -99,27 +108,35 @@
         		</executions>
 			</plugin>
 			<plugin>
+				<groupId>net.sf.exlp</groupId>
+				<artifactId>exlp-maven</artifactId>
+				<version>0.1.12-SNAPSHOT</version>
+				<executions>
+ 					<execution>
+						<id>create-merged-maven-ignore</id>
+						<phase>process-resources</phase> 
+						<goals><goal>mvnVersionIgnore</goal></goals>
+						<configuration>
+							<log>WARN</log>
+							<files>
+							  <param>exlp/maven/exlp-versions.xml</param>
+				<!-- 			  <param>${basedir}/src/main/resources/jeesl/maven/jeesl-versions.xml</param>  -->
+							</files>
+							<saveTo>${basedir}/src/main/resources/ca4j/maven/ignore-versions.xml</saveTo>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
 		        <groupId>org.codehaus.mojo</groupId>
 		        <artifactId>versions-maven-plugin</artifactId>
 		        <version>2.2</version>
-		        <configuration>
-					<rulesUri>file://${project.basedir}/src/main/resources/config.jetty/maven-versions.xml</rulesUri>
-		        </configuration>
+		        <configuration><configuration><rulesUri>${maven.ignore.versions}</rulesUri></configuration></configuration>
 		      </plugin>
+		       
 		</plugins>
 	</build>
-	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>net.sf.exlp</groupId>
-    			<artifactId>exlp-bom</artifactId>
-    			<version>0.1.12-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 	
 	<distributionManagement>
 		<snapshotRepository>

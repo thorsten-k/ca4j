@@ -1,10 +1,12 @@
 package de.kisner.ca4j.factory.ca4j;
 
 import de.kisner.ca4j.interfaces.Ca4jAuthority;
+import de.kisner.ca4j.interfaces.Ca4jCertificate;
 import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
 
-public class Ca4jAuthorityFactory<CA extends Ca4jAuthority<DN>,
-								DN extends Ca4jDistinguishedName>
+public class Ca4jAuthorityFactory<CA extends Ca4jAuthority<DN,CERT>,
+								DN extends Ca4jDistinguishedName,
+								CERT extends Ca4jCertificate>
 {	
 	private final Class<CA> cCa;
 	
