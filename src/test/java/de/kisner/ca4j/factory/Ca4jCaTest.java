@@ -8,11 +8,9 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
 import de.kisner.ca4j.Ca4jBootstrap;
 import de.kisner.ca4j.exception.Ca4jException;
-import de.kisner.ca4j.factory.ca4j.Ca4jDistinguishedNameFactory;
 import de.kisner.ca4j.factory.x509.PemFactory;
 import de.kisner.ca4j.factory.x509.X509CertificateFactory;
 import de.kisner.ca4j.factory.x509.X509CsrFactory;
-import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
 import de.kisner.ca4j.model.CaDistinguishedName;
 import de.kisner.ca4j.util.KeyUtils;
 

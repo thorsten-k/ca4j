@@ -1,4 +1,4 @@
-package de.kisner.ca4j.interfaces;
+package de.kisner.ca4j.interfaces.model;
 
 public interface Ca4jSigningRequest <DN extends Ca4jDistinguishedName>
 {	

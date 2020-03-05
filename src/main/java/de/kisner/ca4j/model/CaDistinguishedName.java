@@ -1,6 +1,6 @@
 package de.kisner.ca4j.model;
 
-import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
+import de.kisner.ca4j.interfaces.model.Ca4jDistinguishedName;
 
 public class CaDistinguishedName implements Ca4jDistinguishedName
 {

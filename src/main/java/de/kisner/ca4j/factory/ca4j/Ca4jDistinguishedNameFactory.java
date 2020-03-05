@@ -3,7 +3,7 @@ package de.kisner.ca4j.factory.ca4j;
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
-import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
+import de.kisner.ca4j.interfaces.model.Ca4jDistinguishedName;
 
 public class Ca4jDistinguishedNameFactory<DN extends Ca4jDistinguishedName>
 {	

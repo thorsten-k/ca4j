@@ -2,7 +2,7 @@ package de.kisner.ca4j.factory.x509;
 
 import org.bouncycastle.asn1.x500.X500Name;
 
-import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
+import de.kisner.ca4j.interfaces.model.Ca4jDistinguishedName;
 
 public class X500NameFactory <DN extends Ca4jDistinguishedName>
 {  

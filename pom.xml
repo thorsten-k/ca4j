@@ -16,10 +16,6 @@
 		<maven.ignore.versions>file://${project.basedir}/src/main/resources/ca4j/maven/ignore-versions.xml</maven.ignore.versions>
 	</properties>
 
-	<prerequisites>
-		<maven>3.0</maven>
-	</prerequisites>
-
 	<dependencyManagement>
 		
 	</dependencyManagement>

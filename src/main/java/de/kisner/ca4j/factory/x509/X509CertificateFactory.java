@@ -28,7 +28,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 
 import de.kisner.ca4j.exception.Ca4jException;
 import de.kisner.ca4j.factory.ca4j.Ca4jCertificateExtensionFactory;
-import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
+import de.kisner.ca4j.interfaces.model.Ca4jDistinguishedName;
 import de.kisner.ca4j.model.CaCertificateExtension;
 
 public class X509CertificateFactory <DN extends Ca4jDistinguishedName>

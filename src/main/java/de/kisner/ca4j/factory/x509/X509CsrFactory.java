@@ -16,7 +16,7 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 
 import de.kisner.ca4j.exception.Ca4jException;
-import de.kisner.ca4j.interfaces.Ca4jDistinguishedName;
+import de.kisner.ca4j.interfaces.model.Ca4jDistinguishedName;
 
 public class X509CsrFactory <DN extends Ca4jDistinguishedName>
 {
