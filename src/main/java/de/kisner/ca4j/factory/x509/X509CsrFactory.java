@@ -57,7 +57,8 @@ public class X509CsrFactory <DN extends Ca4jDistinguishedName>
 	            throw new Ca4jException("File is a "+o.getClass().getName()+", but expected a "+PKCS10CertificationRequest.class.getName());
 	        }
 					
-		} catch (IOException e) {
+		}
+	    catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

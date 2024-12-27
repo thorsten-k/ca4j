@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
@@ -15,21 +16,6 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
 public class PemFactory
 {	
-	public static String toString(X509Certificate certificate)
-	{
-		try
-		{
-			StringWriter sw = new StringWriter();
-			JcaPEMWriter writer = new JcaPEMWriter(sw);
-			writer.writeObject(certificate);
-			writer.flush();
-			return sw.toString();
-		
-		}
-		catch (IOException e) {e.printStackTrace();}
-		return null;
-	}
-	
 	public static String toString(PrivateKey privateKey)
 	{
 	    try
@@ -42,6 +28,18 @@ public class PemFactory
 	    }
 	    catch (IOException e) {e.printStackTrace();}
 		return null;
+	}
+	public static void write(PrivateKey privateKey, Path path)
+	{
+		try
+		{
+			BufferedWriter fw = Files.newBufferedWriter(path, StandardCharsets.UTF_8,StandardOpenOption.CREATE);
+			JcaPEMWriter writer = new JcaPEMWriter(fw);
+			writer.writeObject(privateKey);
+			writer.flush();
+			writer.close();
+		}
+		catch (IOException e) {e.printStackTrace();}
 	}
 	
 	public static String toString(PKCS10CertificationRequest csr)
@@ -58,7 +56,33 @@ public class PemFactory
 		catch (IOException e) {e.printStackTrace();}
 		return null;
 	}
+	public static void write(PKCS10CertificationRequest privateKey, Path path)
+	{
+		try
+		{
+			BufferedWriter fw = Files.newBufferedWriter(path, StandardCharsets.UTF_8,StandardOpenOption.CREATE);
+			JcaPEMWriter writer = new JcaPEMWriter(fw);
+			writer.writeObject(privateKey);
+			writer.flush();
+			writer.close();
+		}
+		catch (IOException e) {e.printStackTrace();}
+	}
 	
+	public static String toString(X509Certificate certificate)
+	{
+		try
+		{
+			StringWriter sw = new StringWriter();
+			JcaPEMWriter writer = new JcaPEMWriter(sw);
+			writer.writeObject(certificate);
+			writer.flush();
+			return sw.toString();
+		
+		}
+		catch (IOException e) {e.printStackTrace();}
+		return null;
+	}
 	public static void toFile(X509Certificate certificate, File file)
 	{
 		try
@@ -67,6 +91,7 @@ public class PemFactory
 			JcaPEMWriter writer = new JcaPEMWriter(fw);
 			writer.writeObject(certificate);
 			writer.flush();
+			writer.close();
 		}
 		catch (IOException e) {e.printStackTrace();}
 	}

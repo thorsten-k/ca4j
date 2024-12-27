@@ -64,7 +64,7 @@ public class X509CertificateFactory <DN extends Ca4jDistinguishedName>
 		return sign(dnCa,kpCa.getPublic(),extensions);
 	}
 	
-	public X509Certificate sign(DN dnHost, PublicKey pkHost) throws Ca4jException {return sign(fX500.build(dnHost),pkHost);}
+	public X509Certificate sign(DN dnHost, PublicKey pkHost) throws Ca4jException {return this.sign(fX500.build(dnHost),pkHost);}
 	public X509Certificate sign(DN dnHost, PublicKey pkHost, List<CaCertificateExtension> extensions) throws Ca4jException {return sign(fX500.build(dnHost), SubjectPublicKeyInfo.getInstance(pkHost.getEncoded()), extensions);}
 	public X509Certificate sign(X500Name x500Cert, PublicKey pkHost) throws Ca4jException {return sign(x500Cert,SubjectPublicKeyInfo.getInstance(pkHost.getEncoded()));}
 	public X509Certificate sign(X500Name x500Cert, SubjectPublicKeyInfo sbki) throws Ca4jException {return sign(x500Cert,sbki,new ArrayList<CaCertificateExtension>());}

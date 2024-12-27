@@ -1,5 +1,7 @@
 package de.kisner.ca4j.factory.ca4j;
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.bouncycastle.asn1.x500.RDN;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 
@@ -30,8 +32,13 @@ public class Ca4jDistinguishedNameFactory<DN extends Ca4jDistinguishedName>
 	public DN build()
 	{
 		DN dn = null;
-		try {dn = c.newInstance();}
-		catch (InstantiationException | IllegalAccessException e) {e.printStackTrace();}
+		try {dn = c.getDeclaredConstructor().newInstance();}
+		catch (InstantiationException e) {e.printStackTrace();}
+		catch (IllegalAccessException e) {e.printStackTrace();}
+		catch (IllegalArgumentException e) {e.printStackTrace();}
+		catch (InvocationTargetException e) {e.printStackTrace();}
+		catch (NoSuchMethodException e) {e.printStackTrace();}
+		catch (SecurityException e) {e.printStackTrace();}
 		return dn;
 	}
 	

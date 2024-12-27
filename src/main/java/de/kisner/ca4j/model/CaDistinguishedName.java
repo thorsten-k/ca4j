@@ -4,6 +4,11 @@ import de.kisner.ca4j.interfaces.model.Ca4jDistinguishedName;
 
 public class CaDistinguishedName implements Ca4jDistinguishedName
 {
+	public CaDistinguishedName()
+	{
+		
+	}	
+	
 	private String country;
 	@Override public String getCountry() {return country;}
 	@Override public void setCountry(String country) {this.country = country;}
@@ -24,9 +29,4 @@ public class CaDistinguishedName implements Ca4jDistinguishedName
 	@Override public String getCommonName() {return commonName;}
 	@Override public void setCommonName(String commonName) {this.commonName = commonName;}
 
-	
-	public CaDistinguishedName()
-	{
-		
-	}	
 }
