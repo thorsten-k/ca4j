@@ -1,5 +1,6 @@
 package de.kisner.ca4j.factory.ca4j;
 
+import java.lang.reflect.InvocationTargetException;
 import java.security.PrivateKey;
 
 import de.kisner.ca4j.factory.x509.PemFactory;
@@ -21,8 +22,13 @@ public class Ca4jAuthorityFactory<CA extends Ca4jAuthority<DN,CERT>,
 	public CA build()
 	{
 		CA ca = null;
-		try {ca = cCa.newInstance();}
-		catch (InstantiationException | IllegalAccessException e) {e.printStackTrace();}
+		try {ca = cCa.getDeclaredConstructor().newInstance();}
+		catch (InstantiationException e) {e.printStackTrace();}
+		catch (IllegalAccessException e) {e.printStackTrace();}
+		catch (IllegalArgumentException e) {e.printStackTrace();}
+		catch (InvocationTargetException e) {e.printStackTrace();}
+		catch (NoSuchMethodException e) {e.printStackTrace();}
+		catch (SecurityException e) {e.printStackTrace();}
 		return ca;
 	}
 	
